@@ -2,9 +2,6 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
 const QuestionCard = props => {
-
-async function getQues
-
   return (
     <TouchableOpacity
       onPress={() => {

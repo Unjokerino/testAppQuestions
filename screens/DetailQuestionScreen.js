@@ -36,26 +36,19 @@ export default function DetailQuestionScreen(props) {
     }
   }
 
-  let SetInterpolate = animatedValue[0].interpolate({
-    inputRange: [0, 180],
-    outputRange: ['180deg', '360deg'],
-  });
-
-  const Rotate_Y_AnimatedStyle = {
-    transform: [{rotateX: SetInterpolate}],
-  };
-
   useEffect(() => {
     getQuestion().then(setquestion);
-  }, [getQuestion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   async function getQuestion() {
     let result = fetch(props.route.params.url).then(response =>
       response.json().then(response => {
-        response.answers.forEach(answer => {
-          setanimatedValue([animatedValue, new Animated.Value(0)]);
+        response.answers.forEach(async answer => {
+          await setanimatedValue([...animatedValue, new Animated.Value(0)]);
         });
+
         return response;
       }),
     );
@@ -64,8 +57,9 @@ export default function DetailQuestionScreen(props) {
 
   return (
     <View contentInsetAdjustmentBehavior="automatic">
-      <Text style={styles.question}>{question.question}</Text>
+      <Text style={styles.question}> {question.question} </Text>
       <View style={styles.answersContainer}>
+        {console.log(animatedValue)}
         {question.answers !== undefined ? (
           question.answers.map((answer, index) => {
             return (
@@ -73,7 +67,16 @@ export default function DetailQuestionScreen(props) {
                 <View style={[styles.answerContainer]}>
                   <Animated.View
                     style={[
-                      Rotate_Y_AnimatedStyle,
+                      {
+                        transform: [
+                          {
+                            rotateX: animatedValue[index].interpolate({
+                              inputRange: [0, 180],
+                              outputRange: ['180deg', '360deg'],
+                            }),
+                          },
+                        ],
+                      },
                       styles.imageStyle,
                       styles.flipLockContainer,
                     ]}>
@@ -85,7 +88,7 @@ export default function DetailQuestionScreen(props) {
                       {answer.number}
                     </Text>
                   </Animated.View>
-                  <Text style={styles.answer}>{answer.answer}</Text>
+                  <Text style={styles.answer}> {answer.answer} </Text>
                 </View>
               </TouchableOpacity>
             );
