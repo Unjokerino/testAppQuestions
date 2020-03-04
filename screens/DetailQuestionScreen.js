@@ -44,7 +44,9 @@ export default function DetailQuestionScreen(props) {
   function closeEveryThing() {
     for (let i = 0; i < animatedValue.length; i++) {
       animatedValue[i] = new Animated.Value(180);
+      
       flip_Animation(i);
+      visible[i] = false
     }
     setTimeout(() => {
       props.navigation.goBack();
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   header: {
-    height: 50,
+    paddingTop:50,
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
