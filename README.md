@@ -1,5 +1,7 @@
 # testAppQuestions
 
+
+
 IOS:
 
 В папке проекта:
@@ -14,3 +16,6 @@ Android
 run 
 npm install
 react-native run-android
+
+
+![App GIF](https://i.ibb.co/7tQvZ7S/123132.gif)
