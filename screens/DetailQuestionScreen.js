@@ -4,17 +4,20 @@ import {
   Text,
   Button,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
   Image,
   Animated,
 } from 'react-native';
+
+
 
 export default function DetailQuestionScreen(props) {
   const [question, setquestion] = useState({});
   const [flipLockNumber, setFlipLockNumber] = useState({});
   const [animatedValue, setanimatedValue] = useState([]);
   const [value, setvalue] = useState(0);
-  const [visible, setvisible] = useState(false);
+  const [visible, setvisible] = useState([false, false]);
 
   function flip_Animation(index) {
     if (value >= 90) {
@@ -23,17 +26,29 @@ export default function DetailQuestionScreen(props) {
         tension: 10,
         friction: 8,
       }).start();
+      visible[index] = false;
       setvalue(0);
-      setvisible(false);
     } else {
+      
       Animated.spring(animatedValue[index], {
         toValue: 180,
         tension: 10,
         friction: 8,
       }).start();
-      setvisible(true);
+      visible[index] = true;
+
       setvalue(180);
     }
+  }
+
+  function closeEveryThing() {
+    for (let i = 0; i < animatedValue.length; i++) {
+      animatedValue[i] = new Animated.Value(180);
+      flip_Animation(i);
+    }
+    setTimeout(() => {
+      props.navigation.goBack();
+    }, 1000);
   }
 
   useEffect(() => {
@@ -45,10 +60,9 @@ export default function DetailQuestionScreen(props) {
   async function getQuestion() {
     let result = fetch(props.route.params.url).then(response =>
       response.json().then(response => {
-        response.answers.forEach(async answer => {
-          await setanimatedValue([...animatedValue, new Animated.Value(0)]);
-        });
-
+        for (let i = 0; i < response.answers.length; i++) {
+          animatedValue[i] = new Animated.Value(0);
+        }
         return response;
       }),
     );
@@ -57,13 +71,19 @@ export default function DetailQuestionScreen(props) {
 
   return (
     <View contentInsetAdjustmentBehavior="automatic">
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => closeEveryThing()}
+          style={styles.headerItem}>
+          <Text>👈 Назад</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.question}> {question.question} </Text>
       <View style={styles.answersContainer}>
-        {console.log(animatedValue)}
         {question.answers !== undefined ? (
           question.answers.map((answer, index) => {
             return (
-              <TouchableOpacity onPress={() => flip_Animation(index)}>
+              <TouchableWithoutFeedback onPress={() => flip_Animation(index)}>
                 <View style={[styles.answerContainer]}>
                   <Animated.View
                     style={[
@@ -83,14 +103,14 @@ export default function DetailQuestionScreen(props) {
                     <Text
                       style={[
                         styles.flipLockNumber,
-                        {opacity: visible ? 1 : 0},
+                        {opacity: visible[index] ? 1 : 0},
                       ]}>
                       {answer.number}
                     </Text>
                   </Animated.View>
                   <Text style={styles.answer}> {answer.answer} </Text>
                 </View>
-              </TouchableOpacity>
+              </TouchableWithoutFeedback>
             );
           })
         ) : (
@@ -105,6 +125,25 @@ const styles = StyleSheet.create({
   answer: {
     marginVertical: 5,
     padding: 10,
+    fontWeight: 'bold',
+  },
+  header: {
+    height: 50,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+  },
+  headerItem: {
+    marginLeft: 10,
   },
   flipLockContainer: {
     height: 100,
@@ -112,14 +151,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#29282a',
     width: 60,
     alignItems: 'center',
-    borderTopColor: '#000',
-    borderTopWidth: 3,
-    borderBottomColor: '#000',
-    borderBottomWidth: 3,
+    borderRadius: 6,
   },
   flipLockNumber: {
-    color: '#fff',
-    fontSize: 62,
+    height: '100%',
+    color: '#cccccc',
+    fontSize: 72,
   },
   imageStyle: {
     width: 150,

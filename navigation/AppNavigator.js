@@ -17,15 +17,16 @@ export default function AppNavigator(props) {
           component={LoginScreen}
           options={{headerShown: false}}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{headerShown: false}}
         />
         <Stack.Screen
           name="Question"
+          {...props}
           component={DetailQuestionScreen}
-          options={{title: "Вопрос"}}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

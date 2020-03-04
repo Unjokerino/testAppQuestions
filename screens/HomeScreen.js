@@ -10,11 +10,14 @@ import {
 } from 'react-native';
 import QuestionCard from '../components/QuestionCard';
 
+
+
 export default function HomeScreen(props) {
   const [questions, setquestions] = useState([]);
   const [refreshing, setrefreshing] = useState(false);
 
   useEffect(() => {
+ 
     getQuestions().then(setquestions);
   }, []);
 
@@ -34,15 +37,14 @@ export default function HomeScreen(props) {
   }
   return (
     <View style={styles.container}>
+    
       <FlatList
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={getQuestions} />
         }
         style={styles.scrollContainer}
         data={questions}
-        renderItem={({item}) => (
-          <QuestionCard navigation={props.navigation} {...item} />
-        )}
+        renderItem={({item}) => <QuestionCard {...item} {...props} />}
         keyExtractor={item => item.title}
       />
       <View style={styles.footer}>
