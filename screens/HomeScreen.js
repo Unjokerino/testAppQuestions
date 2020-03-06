@@ -52,7 +52,8 @@ export default function HomeScreen(props) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            VKLogin.logout()
+            VKLogin.logout();
+            global.name = undefined;
             props.navigation.replace('Login');
           }}
           style={styles.footerItem}>

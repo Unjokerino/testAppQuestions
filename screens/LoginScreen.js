@@ -23,7 +23,6 @@ export default function HomeScreen(props) {
   }
   async function isLoggined(){
     const isLoggedIn = await VKLogin.isLoggedIn();
-    VKLogin.getCertificateFingerprint().then(console.log)
     if (isLoggedIn) {
       props.navigation.replace('Home');
     }
