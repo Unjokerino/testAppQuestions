@@ -10,8 +10,6 @@ import {
   Animated,
 } from 'react-native';
 
-
-
 export default function DetailQuestionScreen(props) {
   const [question, setquestion] = useState({});
   const [flipLockNumber, setFlipLockNumber] = useState({});
@@ -29,7 +27,6 @@ export default function DetailQuestionScreen(props) {
       visible[index] = false;
       setvalue(0);
     } else {
-      
       Animated.spring(animatedValue[index], {
         toValue: 180,
         tension: 10,
@@ -44,9 +41,9 @@ export default function DetailQuestionScreen(props) {
   function closeEveryThing() {
     for (let i = 0; i < animatedValue.length; i++) {
       animatedValue[i] = new Animated.Value(180);
-      
+
       flip_Animation(i);
-      visible[i] = false
+      visible[i] = false;
     }
     setTimeout(() => {
       props.navigation.goBack();
@@ -77,7 +74,7 @@ export default function DetailQuestionScreen(props) {
         <TouchableOpacity
           onPress={() => closeEveryThing()}
           style={styles.headerItem}>
-          <Text>👈 Назад</Text>
+          <Text style={styles.headerItemText}>👈 Назад</Text>
         </TouchableOpacity>
       </View>
       <Text style={styles.question}> {question.question} </Text>
@@ -130,7 +127,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   header: {
-    paddingTop:50,
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
@@ -141,11 +137,18 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-
+    height: 50,
     elevation: 3,
   },
   headerItem: {
+    height: '100%',
     marginLeft: 10,
+
+    justifyContent: 'center',
+  },
+  headerItemText: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   flipLockContainer: {
     height: 100,

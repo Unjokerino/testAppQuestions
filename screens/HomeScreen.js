@@ -7,17 +7,16 @@ import {
   RefreshControl,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import QuestionCard from '../components/QuestionCard';
-
-
+import VKLogin from 'react-native-vkontakte-login';
 
 export default function HomeScreen(props) {
   const [questions, setquestions] = useState([]);
   const [refreshing, setrefreshing] = useState(false);
 
   useEffect(() => {
- 
     getQuestions().then(setquestions);
   }, []);
 
@@ -37,7 +36,6 @@ export default function HomeScreen(props) {
   }
   return (
     <View style={styles.container}>
-    
       <FlatList
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={getQuestions} />
@@ -47,12 +45,14 @@ export default function HomeScreen(props) {
         renderItem={({item}) => <QuestionCard {...item} {...props} />}
         keyExtractor={item => item.title}
       />
+      <Text style={styles.greetingsText}>Привет {global.email} 👋 </Text>
       <View style={styles.footer}>
         <TouchableOpacity style={[styles.footerItem, styles.active]}>
           <Text style={{color: '#fff'}}>Список вопросов</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            VKLogin.logout()
             props.navigation.replace('Login');
           }}
           style={styles.footerItem}>
@@ -66,10 +66,10 @@ export default function HomeScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop:50,
+    paddingTop: 50,
   },
   scrollContainer: {
-    paddingTop: 20,
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
     flex: 1,
   },
   active: {
@@ -81,6 +81,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  greetingsText:{
+    textAlign:'center',
+    paddingVertical:10,
   },
   footer: {
     elevation: 2,

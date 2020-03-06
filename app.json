@@ -1,4 +1,23 @@
 {
-  "name": "testapp",
-  "displayName": "testapp"
+    "name": "testapp",
+    "displayName": "testapp",
+    "privacy": "public",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+        "image": "./assets/images/splash.png",
+        "resizeMode": "cover",
+        "backgroundColor": "#000"
+    },
+    "ios": {
+        "supportsTablet": true,
+        "bundleIdentifier": "com.testapp.questions"
+    },
+    "android": {
+        "versionCode": 1,
+        "permissions": [],
+        "package": "com.testapp.questions"
+    }
 }
